@@ -1,0 +1,372 @@
+,skill_id,name
+0,474,"""Excuse Me, Are You a Zoat?"""
+1,449,+AG
+2,450,+AV
+3,451,+MA
+4,452,+PA
+5,453,+ST
+6,499,A Sneaky Pair
+7,397,Accurate
+8,498,All You Can Eat
+9,423,Always Hungry
+10,421,Animal Savagery
+11,422,Animosity
+12,409,Arm Bar
+13,495,Baleful Hex
+14,424,Ball & Chain
+15,492,Beer Barrel Bash!
+16,385,Big Hand
+17,487,Blast it!
+18,478,Blind Rage
+19,373,Block
+20,425,Bombardier
+21,426,Bone Head
+22,410,Brawler
+23,411,Break Tackle
+24,477,Brutal Block
+25,489,Bugman's XXXXXX
+26,470,Burst of Speed
+27,398,Cannoneer
+28,361,Catch
+29,427,Chainsaw
+30,386,Claws
+31,399,Cloud Burster
+32,462,Consummate Professional
+33,468,Crushing Blow
+34,374,Dauntless
+35,428,Decay
+36,365,Defensive
+37,375,Dirty Player
+38,387,Disturbing Presence
+39,362,Diving Catch
+40,363,Diving Tackle
+41,364,Dodge
+42,485,Drunkard
+43,400,Dump-off
+44,388,Extra Arms
+45,376,Fend
+46,389,Foul Appearance
+47,458,Frenzied Rush
+48,377,Frenzy
+49,401,Fumblerooskie
+50,480,Fury of the Blood God
+51,475,Ghostly Flames
+52,479,Gored by the Bull
+53,412,Grab
+54,413,Guard
+55,402,Hail Mary Pass
+56,497,Halfling Luck
+57,507,Helmet of VesaeLaer (Thick Skull)
+58,493,Hit and Run
+59,390,Horns
+60,429,Hypnotic Gaze
+61,482,I'll Be Back!
+62,461,Incorporeal
+63,466,Indomitable
+64,391,Iron Hard Skin
+65,508,Ithilmir Armour (Sprint)
+66,414,Juggernaut
+67,366,Jump Up
+68,484,Kaboom!
+69,488,Keen Player
+70,378,Kick
+71,502,Kick 'em while they're down!
+72,430,Kick Team-mate
+73,403,Leader
+74,367,Leap
+75,431,Loner
+76,494,Look into My Eyes
+77,467,Lord of Chaos
+78,481,Maximum Carnage
+79,457,Mesmerizing Dance
+80,415,Mighty Blow
+81,392,Monstrous Mouth
+82,416,Multiple Block
+83,404,Nerves of Steel
+84,432,No Hands
+85,465,Old Pro
+86,405,On the Ball
+87,406,Pass
+88,486,Pick-me-up
+89,417,Pile Driver
+90,433,Plague Ridden
+91,434,Pogo Stick
+92,393,Prehensile Tail
+93,496,Primal Savagery
+94,379,Pro
+95,435,Projectile Vomit
+96,491,Pump Up the Crowd
+97,500,Putrid Regurgitation
+98,490,Raiding Party
+99,471,Ram
+100,436,Really Stupid
+101,437,Regeneration
+102,456,Reliable
+103,438,Right Stuff
+104,407,Running Pass
+105,368,Safe Pair of Hands
+106,408,Safe Pass
+107,476,Savage Mauling
+108,439,Secret Weapon
+109,380,Shadowing
+110,459,Shot to Nothing
+111,369,Side Step
+112,463,Slayer
+113,455,Sneakiest of the Lot
+114,370,Sneaky Git
+115,371,Sprint
+116,440,Stab
+117,418,Stand Firm
+118,381,Strip Ball
+119,419,Strong Arm
+120,472,Strong Passing Game
+121,441,Stunty
+122,372,Sure Feet
+123,382,Sure Hands
+124,442,Swarming
+125,443,Swoop
+126,383,Tackle
+127,444,Take Root
+128,394,Tentacles
+129,469,The Ballista
+130,420,Thick Skull
+131,501,Thinking Man's Troll
+132,447,Throw Team-mate
+133,446,Timmm-ber!
+134,445,Titchy
+135,464,Treacherous
+136,460,Two for One
+137,395,Two Heads
+138,448,Unchannelled Fury
+139,396,Very Long Legs
+140,506,Warpstone Mutation (Claws)
+141,505,Warpstone Mutation (Very Long Legs)
+142,504,Watch Out!
+143,483,Whirling Dervish
+144,473,Wisdom of the White Dwarf
+145,384,Wrestle
+146,503,Yoink!
+0,52,+AG
+1,159,+AV
+2,54,+MA
+3,53,+ST
+4,119,Accurate
+5,136,Always Hungry
+6,170,Animosity
+7,137,Ball & Chain
+8,126,Big Hand
+9,85,Block
+10,138,Blood Lust
+11,139,Bombardier
+12,140,Bone-head
+13,109,Break Tackle
+14,99,Catch
+15,141,Chainsaw
+16,127,Claw
+17,86,Dauntless
+18,142,Decay
+19,87,Dirty Player
+20,356,Disposable
+21,128,Disturbing Presence
+22,100,Diving Catch
+23,101,Diving Tackle
+24,102,Dodge
+25,120,Dump-Off
+26,129,Extra Arms
+27,143,Fan Favourite
+28,88,Fend
+29,130,Foul Appearance
+30,89,Frenzy
+31,110,Grab
+32,111,Guard
+33,121,Hail Mary Pass
+34,131,Horns
+35,144,Hypnotic Gaze
+36,112,Juggernaut
+37,103,Jump Up
+38,90,Kick
+39,358,Kick Team-Mate
+40,91,Kick-Off Return
+41,122,Leader
+42,104,Leap
+43,145,Loner
+44,113,Mighty Blow
+45,206,Monstrous Mouth
+46,114,Multiple Block
+47,123,Nerves Of Steel
+48,146,No Hands
+49,147,Nurgle's Rot
+50,124,Pass
+51,92,Pass Block
+52,115,Piling On
+53,132,Prehensile Tail
+54,93,Pro
+55,148,Really Stupid
+56,149,Regeneration
+57,150,Right Stuff
+58,125,Safe Throw
+59,151,Secret Weapon
+60,94,Shadowing
+61,105,Side Step
+62,106,Sneaky Git
+63,107,Sprint
+64,152,Stab
+65,153,Stakes
+66,116,Stand Firm
+67,95,Strip Ball
+68,117,Strong Arm
+69,154,Stunty
+70,108,Sure Feet
+71,96,Sure Hands
+72,454,Swarming
+73,352,Swoop
+74,97,Tackle
+75,155,Take Root
+76,133,Tentacles
+77,118,Thick Skull
+78,156,Throw Team-Mate
+79,201,Timmm-ber!
+80,157,Titchy
+81,353,"Trademark Stilts (Leap, Very Long Legs)"
+82,134,Two Heads
+83,135,Very Long Legs
+84,202,Weeping Dagger
+85,158,Wild Animal
+86,98,Wrestle
+87,349,+AG
+88,351,+MA
+89,350,+ST
+90,306,Accurate
+91,323,Always Hungry
+92,345,Animosity
+93,324,Ball & Chain
+94,193,"Banner of Champions (Fan Favourite, Leader, Mighty Blow, +AV)"
+95,313,Big Hand
+96,273,Block
+97,325,Blood Lust
+98,326,Bombardier
+99,327,Bone-head
+100,165,"Boots of Var Cor (Leap, Dirty Player)"
+101,166,Bracers of VasaeLaer (Stand Firm)
+102,296,Break Tackle
+103,286,Catch
+104,328,Chainsaw
+105,314,Claw
+106,179,"Crown of Sand (+ST, Decay)"
+107,354,"Crown of Sand (+ST, Leader)"
+108,209,"Crown of Sand (+ST, Leader, Regeneration)"
+109,195,"Curious Cuirass (Disturbing Presence, Hypnotic Gaze, Bone-Head)"
+110,274,Dauntless
+111,329,Decay
+112,275,Dirty Player
+113,357,Disposable
+114,315,Disturbing Presence
+115,287,Diving Catch
+116,288,Diving Tackle
+117,289,Dodge
+118,80,Dragon Helmet (+AV)
+119,186,"Drunken Goblin Boot Ale (Tackle, Bone-head)"
+120,307,Dump-Off
+121,316,Extra Arms
+122,184,Fan Favourite
+123,276,Fend
+124,317,Foul Appearance
+125,277,Frenzy
+126,199,"Fried Goblin Stew (Frenzy, Catch)"
+127,185,"Fried Jungleberry Bundt Cake (+ST, Really Stupid)"
+128,194,"Gloves of Almost Thievery (+AG, Strip Ball, No Hands)"
+129,176,Gloves of Calostas (Diving Catch)
+130,297,Grab
+131,79,Griffin Boots (Leap)
+132,160,Griffin Bracers (+AG)
+133,161,Griffin Greaves (Jump Up)
+134,208,"Grotty Weapon (Ball & Chain, No Hands, Secret Weapon)"
+135,355,"Grotty Weapon (Bombardier, Secret Weapon)"
+136,360,"Grotty Weapon (Chainsaw, Secret Weapon)"
+137,207,"Grotty Weapon (Leap, Very Long Legs)"
+138,298,Guard
+139,308,Hail Mary Pass
+140,188,Helmet of Fear (Foul Appearance)
+141,171,Helmet of VasaeLaer (Thick Skull)
+142,318,Horns
+143,330,Hypnotic Gaze
+144,78,Ithilmir Armour (Sprint)
+145,299,Juggernaut
+146,290,Jump Up
+147,278,Kick
+148,359,Kick Team-Mate
+149,279,Kick-Off Return
+150,309,Leader
+151,291,Leap
+152,331,Loner
+153,173,"Loser's Crown (Tentacles, Take Root)"
+154,300,Mighty Blow
+155,348,Monstrous Mouth
+156,301,Multiple Block
+157,310,Nerves Of Steel
+158,332,No Hands
+159,333,Nurgle's Rot
+160,198,"Ogre Fatback Stew (Wrestle, Mighty Blow)"
+161,311,Pass
+162,280,Pass Block
+163,302,Piling On
+164,319,Prehensile Tail
+165,168,Pro
+166,334,Really Stupid
+167,335,Regeneration
+168,336,Right Stuff
+169,180,Ring of Amarth (Grab)
+170,190,Ring of Nuffle (Fan Favourite)
+171,187,"Roasted Troll Heart Stew (Dauntless, Foul Appearance, No Hands)"
+172,312,Safe Throw
+173,337,Secret Weapon
+174,281,Shadowing
+175,292,Side Step
+176,293,Sneaky Git
+177,200,"Snotling Mystery Stew (Dauntless, Pass)"
+178,294,Sprint
+179,338,Stab
+180,339,Stakes
+181,303,Stand Firm
+182,282,Strip Ball
+183,304,Strong Arm
+184,340,Stunty
+185,295,Sure Feet
+186,283,Sure Hands
+187,284,Tackle
+188,341,Take Root
+189,167,Talisman of Eilai (Two Heads)
+190,320,Tentacles
+191,305,Thick Skull
+192,342,Throw Team-Mate
+193,346,Timmm-ber!
+194,343,Titchy
+195,321,Two Heads
+196,181,Ulthuan Bracers (Fend)
+197,322,Very Long Legs
+198,164,Warpstone Mutation (Big Hand)
+199,162,Warpstone Mutation (Claw)
+200,196,Warpstone Mutation (Disturbing Presence)
+201,84,Warpstone Mutation (Extra Arms)
+202,189,Warpstone Mutation (Foul Appearance)
+203,203,Warpstone Mutation (Horns)
+204,205,Warpstone Mutation (Horns)
+205,204,Warpstone Mutation (Horns)
+206,163,Warpstone Mutation (Prehensile Tail)
+207,83,Warpstone Mutation (Spikes)
+208,169,Warpstone Mutation (Tentacles)
+209,81,Warpstone Mutation (Two Heads)
+210,82,Warpstone Mutation (Very Long Legs)
+211,347,Weeping Dagger
+212,197,Wheel of Chaos Mutation (Big Hand)
+213,191,Wheel of Chaos Mutation (Disturbing Presence)
+214,192,Wheel of Chaos Mutation (Foul Appearance)
+215,183,Wheel of Chaos Mutation (Horns)
+216,177,Wheel of Chaos Mutation (Juggernaut)
+217,175,Wheel of Chaos Mutation (Prehensile Tail)
+218,174,Wheel of Chaos Mutation (Tentacles)
+219,182,Wheel of Chaos Mutation (Two Heads)
+220,178,Wheel of Chaos Mutation (Very Long Legs)
+221,344,Wild Animal
+222,172,"Winner's Crown (Extra Arms, Claw)"
+223,285,Wrestle
