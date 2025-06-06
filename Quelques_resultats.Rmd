@@ -139,7 +139,7 @@ cld(emmeans(mod,"Race")) %>%
   kable(digits=3)
 ```
 
-
+Petite note sur l'interprétation sur les modèles de comptage (Modèle de poisson) et l'interprétation de leurs coefficients
 https://larmarange.github.io/guide-R/analyses_avancees/modeles-comptage.html
 
 ```{r}
