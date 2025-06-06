@@ -1,0 +1,395 @@
+---
+title: "Bloodbowl : quelques statistiques"
+output: html_document
+author: "Pierre Gaignon"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# Des données en libre accès
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(ggplot2)
+library(kableExtra)
+# source : https://github.com/gsverhoeven/fumbbl_datasets
+```
+
+Une personne a réalisé un super travail sur l'analyse de données de bloodbowl, et notamment sur la compilation des résultats de plusieurs matchs. On va repartir des données collectées dans ce projet (lien github ci-dessus).
+
+
+# Quelques notes sur Bloodbowl 
+
+Les grandes idées sont présentées dans le projet principal. Quelques notes spécifiques à ce document :
+
+- Touchdown (TD) : Comme dans le football américain, cela représente le fait d'amener le porteur de ballon dans la zone d'en-but de l'adversaire (comme un essai au rugby). Chaque TD donne 1 point, et le coach avec le plus gros score gagne, avec une égalité possible. 
+
+
+# Import des données
+
+```{r}
+# Base où 1 ligne = 1 match 
+db.match=read_csv("data/df_matches.csv") %>% 
+  select(-team1_id,-team1_coach_id,-...1,-match_id) 
+df.skills=read_csv("data/df_skills.csv")
+
+df.mbt <- read_csv("data/df_mbt.csv")
+
+df.tourney <- read_csv("data/df_tourneys.csv")
+
+
+# On ne va conserver que les matchs des équipes ayant jouées 
+
+
+```
+
+
+Il existe de très nombreuses équipes. L'éditeur a donné un roster d'équipe officielle, mais la communauté est très active et de nouvelles équipes ont été proposées par celle-ci. L'objectif étant d'avoir une approche statistique, seule les équipes ayant joué au moins 4000 matchs (sur une base de 258 152 match) seront conservées.
+
+```{r}
+
+
+Select.Race =db.Res %>% 
+  group_by(Race) %>% 
+  summarize(Nb.Match=n()) %>% filter(Nb.Match>5000) %>% 
+  arrange(-Nb.Match)
+
+db.match.Red = db.match %>% 
+  filter((team1_race_name%in%Select.Race$Race) &(team2_race_name%in%Select.Race$Race) )
+```
+
+Il nous reste alors 28 équipes à étudier. La plus jouée reste les Orques, tandit que les vampires sont ceux les moins jouées.  
+
+```{r}
+Select.Race %>% 
+  kable(.,col.names=c("Equipe","Nombre de Match Joué"))
+  
+```
+
+
+
+# Qui marque le plus ? Et contre qui ? 
+
+Pour gagner au bloodbowl, il faut marquer le plus de TD possible (en tout cas, plus que son adversaire). On va donc se demander qui sont les meilleurs. On peut déjà regarder en moyenne qui marque le plus ou prend le plus de TD.
+
+```{r}
+
+db.Resultat = db.match.Red %>% select(team1_race_name,team1_win,match_date,team1_score,team2_score,team2_race_name ) %>% 
+  rename(Race=team1_race_name,
+         Resultats=team1_win,
+         TD.Marques=team1_score,
+         TD.Pris=team2_score,
+         Opposants=team2_race_name
+         ) %>% 
+  # On va récupérer les résultats de l'équipe d'oppositon
+  bind_rows(.,{ db.match.Red %>% select(team1_race_name,team2_race_name,team2_win,match_date,team1_score,team2_score) %>% 
+  rename(Race=team2_race_name,
+         Resultats=team2_win,
+         TD.Marques=team2_score,
+         TD.Pris=team1_score,
+         Opposants=team1_race_name)}) %>% 
+  mutate(Resultats=case_when(Resultats==1~"G",
+                           Resultats==0~"N",
+                           T~"P"))
+
+
+db.Resultat %>% 
+  group_by(Race) %>% 
+  summarize(TD.Marques=mean(TD.Marques),
+            TD.Pris=mean(TD.Pris)) %>% 
+  mutate(Classement.Attaque=dense_rank(-TD.Marques),
+         Classement.Defense=dense_rank(TD.Pris),
+        Ecart.TD=TD.Marques-TD.Pris) %>% 
+  arrange(-Ecart.TD) %>% 
+  kable(digits=2)
+
+table(db.Resultat$Race,db.Resultat$Opposants) %>% 
+  as.data.frame() %>% distinct() %>% arrange(Freq)
+```
+
+Les meilleurs marqueurs sont les Skavens, avec en moyenne 1.54 TD réalisé par match, alors que les ogres sont les moins bons (0.79). La meilleure défense semble revenir aux Amazone (0.91), et la pire revient aux Goblins (1.58). On peut aussi regarder l'écart entre TD Marqués et TD pris. 
+
+Même s'il semble que des équipes se dégagent, on peut se demander si d'un point de vue statistique, il y a des écarts significatifs entre les équipes. Pour cela, on va utiliser une méthode simple : l'analyse de variance, ou Anova. L'objectif est de tester l'existence d'écart entre les équipes et potentiellement le quantifier. Dans un premier temps, on va tester un modèle simple, ou seule l'équipe jouée influe sur le nombre de TD Marques. 
+
+```{r}
+mod = lm(TD.Marques~Race,data=db.Resultat)
+library(car)
+Anova(mod,type="III")
+```
+
+Ici, on voit que l'effet *Race* a un effet très fort sur le nombre de TD marquées, avec une p-value très inférieure à 0.05, le seuil généralement utilisé pour considérer qu'il y a un effet. On peut alors se demander quels écarts existent entre les équipes. On peut alors estimer l'incertitude autour de ces valeurs
+
+```{r}
+library(emmeans)
+emmeans(mod,"Race") %>%
+  as.data.frame() %>% 
+  dplyr::select(-df)%>% 
+  kable(digits=3)
+```
+
+
+
+
+```{r}
+library(multcomp)
+cld(emmeans(mod,"Race")) %>% 
+  dplyr::select(-df) %>% 
+  kable(digits=3)
+```
+
+
+https://larmarange.github.io/guide-R/analyses_avancees/modeles-comptage.html
+
+```{r}
+mod.Poisson = glm(TD.Marques~Race,data=db.Resultat,family="quasipoisson")
+library(car)
+summary(mod.Poisson)
+Anova(mod.Poisson,type="III")
+cld(emmeans(mod.Poisson,"Race")) %>% 
+  dplyr::select(-df) %>% 
+  kable(digits=3)
+
+temp = cld(emmeans(mod.Poisson,"Race")) %>% 
+  dplyr::select(-df) %>% 
+  mutate(emmean=exp(emmean))
+library(performance)
+mod.Poisson %>%  performance::check_overdispersion()
+```
+
+
+
+# Quelques basiques 
+```{r}
+
+Res.Race=db.Res %>% 
+  filter(Race %in% Select.Race$Race) %>% 
+  group_by(Race) %>% 
+  summarize(Nb.Vict=sum(Results=="G"),
+            Nb.Nul=sum(Results=="N"),
+            Nb.Perte=sum(Results=="P")) %>% 
+  left_join(.,Select.Race,by="Race") %>% 
+  mutate(Victoire=Nb.Vict/Nb.Match*100,
+         Nul=Nb.Nul/Nb.Match*100,
+         Perdu=Nb.Perte/Nb.Match*100) %>%
+  select(-Nb.Vict,-Nb.Nul,-Nb.Perte) %>% 
+  gather(key="Resultat","Pourcentage",-Race,-Nb.Match) %>% 
+  mutate(Resultat=factor(Resultat,levels=c("Victoire","Nul","Perdu")))
+
+
+Res.Race %>% ggplot(aes(x=Race,y=Pourcentage,fill=Resultat))+
+  geom_bar(stat="identity")+theme_classic()+
+  theme(axis.text.x = element_text(angle=45,hjust=1))+
+  scale_fill_manual("Resultat",values=c("darkgreen","grey","darkred"))
+```
+
+Présente souvent un tableau => % de victoire. Mais comment l'obtenir ? Car en fait, 3 résultats possibles 
+
+Victoire, victoire seul, ou victoire + nul (soit pas défaite ?) Si on compare les deux ?
+
+
+
+```{r}
+Res.Race %>% filter(Resultat=="Victoire") %>% arrange(-Pourcentage) %>% 
+  ggplot(aes(x=reorder(Race,-Pourcentage),y=Pourcentage))+
+  geom_bar(stat="identity")+theme_classic()+labs(y="% de Victoire")+
+  theme(axis.text.x = element_text(angle=45,hjust=1))
+```
+
+
+3 Races qui écrasent les autres : Bas fonds, Amazon et Mors Vivants
+
+
+A la traîne : halfing, Ogre et Goblin. 
+
+```{r}
+Res.Race %>% filter(Resultat!="Perdu") %>% group_by(Race) %>% 
+  summarize(Pourcentage=sum(Pourcentage)) %>% 
+  ggplot(aes(x=reorder(Race,-Pourcentage),y=Pourcentage))+
+  geom_text(aes(y=Pourcentage+1.5,label=round(Pourcentage,1)),size=2.5)+
+  geom_bar(stat="identity")+theme_classic()+labs(y="% de Non défaite")+
+  theme(axis.text.x = element_text(angle=45,hjust=1))+
+  labs(x="Race")
+```
+
+On retrouve les mêmes !! 
+
+
+```{r}
+Res.Race %>% filter(Resultat=="Nul") %>% arrange(-Pourcentage) %>% 
+  ggplot(aes(x=reorder(Race,-Pourcentage),y=Pourcentage))+
+  geom_bar(stat="identity")+theme_classic()+labs(y="% de Nul")+
+  theme(axis.text.x = element_text(angle=45,hjust=1))
+```
+
+
+
+et Si on prend le système de points ?
+
+```{r}
+Res.Race %>% 
+  mutate(Point=case_when(Resultat=="Victoire" ~3*Pourcentage/100,
+                         Resultat=="Nul"~1*Pourcentage/100,
+                         T~0)) %>% 
+  group_by(Race) %>% 
+  summarize(Pt.Moy=sum(Point)) %>% 
+  ggplot(aes(x=reorder(Race,-Pt.Moy),y=Pt.Moy))+
+  geom_text(aes(y=Pt.Moy+0.05,label=round(Pt.Moy,2)),size=2.5)+
+  geom_bar(stat="identity")+theme_classic()+labs(y="Point Moyen",x="Race")+
+  theme(axis.text.x = element_text(angle=45,hjust=1))
+```
+
+
+
+
+
+```{r}
+
+Res.Race %>% ggplot(aes(x=Resultat,y=Pourcentage))+
+  # facet_wrap(vars(Resultat))+
+  geom_boxplot()+
+  # geom_point()+
+  geom_jitter(height = 0)+
+  theme(axis.text.x = element_text(angle=45,hjust=1))
+
+
+db.Opp = db.match  %>% select(team1_race_name,team1_win,team2_race_name) %>% 
+  rename(Race=team1_race_name,
+         Results=team1_win,
+         Race.Opp=team2_race_name) %>% 
+  bind_rows(.,{db.match  %>% select(team1_race_name,team2_win,team2_race_name) %>% 
+  rename(Race=team2_race_name,
+         Results=team2_win,
+         Race.Opp=team1_race_name)}) %>% 
+  filter(Race %in% Nb.Match$Race&Race.Opp%in% Nb.Match$Race) %>% 
+  mutate(Results=case_when(Results==1~"G",
+                           Results==0~"N",
+                           T~"P")) %>% 
+  group_by(Race,Race.Opp) %>% 
+  summarize(Nb.Vict=sum(Results=="G"),
+            Nb.Nul=sum(Results=="N"),
+            Nb.Perte=sum(Results=="P")) %>% 
+  mutate(Nb.Match=Nb.Vict +Nb.Nul+ Nb.Perte)%>% 
+  mutate(Victoire=Nb.Vict/Nb.Match*100,
+         Nul=Nb.Nul/Nb.Match*100,
+         Perdu=Nb.Perte/Nb.Match*100) %>%
+  select(-Nb.Vict,-Nb.Nul,-Nb.Perte) %>% 
+  gather(key="Resultat","Pourcentage",-Race,-Race.Opp,-Nb.Match) %>% 
+  mutate(Resultat=factor(Resultat,levels=c("Victoire","Nul","Perdu")))
+
+
+
+
+db.Opp%>% ggplot(aes(x=Race.Opp,y=Pourcentage,fill=Resultat))+
+  geom_bar(stat="identity")+theme_classic()+
+  facet_wrap(vars(Race))+
+  theme(axis.text.x = element_text(angle=45,hjust=1,size = 7))+
+  scale_fill_manual("Resultat",values=c("darkgreen","grey","darkred"))+
+  labs(x="Equipe Adverse")
+
+```
+
+
+Et par Année ?
+
+```{r}
+
+Nb.Match.Year =db.Res%>% 
+  mutate(Annee=year(match_date)) %>% 
+  group_by(Race,Annee) %>% 
+  summarize(Nb.Match.Year=n()) %>% 
+  filter(Race %in% Nb.Match$Race)
+
+
+db.Race.Year=db.Res %>% 
+  mutate(Annee=year(match_date)) %>% 
+  filter(Race %in% Nb.Match$Race) %>% 
+  group_by(Race,Annee) %>% 
+  summarize(Nb.Vict=sum(Results=="G"),
+            Nb.Nul=sum(Results=="N"),
+            Nb.Perte=sum(Results=="P")) %>% 
+  left_join(.,Nb.Match.Year,by=c("Race","Annee")) %>% 
+  mutate(Victoire=Nb.Vict/Nb.Match.Year*100,
+         Nul=Nb.Nul/Nb.Match.Year*100,
+         Perdu=Nb.Perte/Nb.Match.Year*100) %>%
+  select(-Nb.Vict,-Nb.Nul,-Nb.Perte) %>% 
+  gather(key="Resultat","Pourcentage",-Race,-Nb.Match.Year,-Annee) %>% 
+  mutate(Resultat=factor(Resultat,levels=c("Victoire","Nul","Perdu")))
+
+
+db.Race.Year %>% 
+  ggplot(aes(x=as.character(Annee),y=Pourcentage,fill=Resultat))+
+  geom_bar(stat="identity")+
+  facet_wrap(vars(Race))+
+  theme_classic()
+
+```
+
+
+# Focus sur la Noblesse impériale 
+
+
+
+```{r}
+Imp =  db.match  %>% select(team1_race_name,team1_win,team2_race_name,match_date) %>% 
+  rename(Race=team1_race_name,
+         Results=team1_win,
+         Race.Opp=team2_race_name) %>% 
+  bind_rows(.,{db.match  %>% select(team1_race_name,team1_win,team2_race_name,match_date) %>% 
+  rename(Race=team2_race_name,
+         Results=team1_win,
+         Race.Opp=team1_race_name)}) %>% 
+  filter(Race=="Imperial Nobility") %>% 
+  mutate(Annee=year(match_date))%>% 
+  mutate(Results=case_when(Results==1~"G",
+                           Results==0~"N",
+                           T~"P")) %>% 
+  group_by(Race.Opp,Annee)%>% 
+  summarize(Nb.Vict=sum(Results=="G"),
+            Nb.Nul=sum(Results=="N"),
+            Nb.Perte=sum(Results=="P")) %>% 
+  mutate(Nb.Match.Imp=Nb.Vict +Nb.Nul+ Nb.Perte)%>% 
+  mutate(Victoire=Nb.Vict/Nb.Match.Imp*100,
+         Nul=Nb.Nul/Nb.Match.Imp*100,
+         Perdu=Nb.Perte/Nb.Match.Imp*100) %>% 
+  filter(Race.Opp %in% Nb.Match$Race)%>%
+  select(-Nb.Vict,-Nb.Nul,-Nb.Perte) %>% 
+  gather(key="Resultat","Pourcentage",-Race.Opp,-Nb.Match.Imp,-Annee) %>% 
+  mutate(Resultat=factor(Resultat,levels=c("Victoire","Nul","Perdu")))
+
+Imp %>% 
+  ggplot(aes(x=as.character(Annee),y=Pourcentage,fill=Resultat))+
+  geom_bar(stat="identity")+
+  facet_wrap(vars(Race.Opp))+
+  theme_classic()
+```
+
+
+
+# Les TD ? Qui Marque ?
+
+```{r}
+db.TD <-  db.match.Red  %>%
+  mutate(TD.Ecart=team1_score-team2_score) %>% select(team1_race_name,team1_win,team2_race_name,match_date,team1_score,TD.Ecart) %>% 
+  rename(Race=team1_race_name,
+         Results=team1_win,
+         Race.Opp=team2_race_name,
+         TD=team1_score) %>% 
+  bind_rows(.,{db.match  %>%
+      mutate(TD.Ecart=-(team1_score-team2_score)) %>% 
+      select(team1_race_name,team1_win,team2_race_name,match_date,team2_score,TD.Ecart) %>% 
+  rename(Race=team2_race_name,
+         Results=team1_win,
+         Race.Opp=team1_race_name,
+         TD=team2_score)})
+
+db.Sum.Td <- db.TD %>% 
+  group_by(Race,Results) %>% 
+  summary(TD=mean(TD),
+          TD.Ecart=mean(TD.Ecart),
+          Nb.Match=n())
+
+db.Sum.Td
+```
+
